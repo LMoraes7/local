@@ -1,0 +1,56 @@
+version: '3.5'
+
+networks:
+  local:
+    driver: bridge
+    name: java_metrics
+
+services:
+  app:
+    image: lmoraes7/java-metrics
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: app
+    restart: always
+    environment:
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_SCHEMA: curso
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "8080:80"
+    networks:
+      - local
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres
+    container_name: postgres
+    restart: always
+    environment:
+      POSTGRES_DB: curso
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    networks:
+      - local
+
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    restart: always
+    user: root
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus/prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+    ports:
+      - "9090:9090"
+    networks:
+      - local

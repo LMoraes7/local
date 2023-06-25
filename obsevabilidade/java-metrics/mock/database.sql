@@ -1,0 +1,2 @@
+insert into user(id, username, password) values ('USR-0001', 'aluno@email.com', '$2a$10$ht0VedJvc.0TL1gfzYEu4eOvuHjupcTP9S1SRYPqIFAV3WyIJCXvu');
+insert into user(id, username, password) values ('USR-0002', 'moderador@email.com', '$2a$10$ht0VedJvc.0TL1gfzYEu4eOvuHjupcTP9S1SRYPqIFAV3WyIJCXvu');
